@@ -17,15 +17,18 @@
   "devDependencies": {
     "@google/clasp": "^2.4.1",
     "@types/react": "^19.2.10",
+    "@types/react-calendar-heatmap": "^1.9.0",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "typescript": "^5.9.3",
     "vite-plugin-singlefile": "^2.3.0"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
     "react": "^19.2.4",
+    "react-calendar-heatmap": "^1.10.0",
     "react-dom": "^19.2.4",
-    "rollup-plugin-google-apps-script": "^1.1.13",
+    "tailwindcss": "^4.1.18",
     "vite": "^5.4.21"
   }
 }
