@@ -25,9 +25,11 @@ export default defineConfig({
       output: {
         dir: "dist",
         entryFileNames: "main.js",
+        format: "iife",
       },
     },
     minify: false, // trueにすると関数名が消えるのでfalse必須
+    emptyOutDir: false,
   },
   resolve: {
     alias: {

@@ -5,19 +5,29 @@
   "main": "index.js",
   "scripts": {
     "build": "vite build",
+    "build:ui": "vite build --config vite.config.ui.mts",
     "build:watch": "vite build --watch",
     "push": "clasp push",
     "push:watch": "clasp push --watch",
-    "deploy": "vite build && clasp push"
+    "deploy": "npm run build:ui && npm run build && clasp push"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@google/clasp": "^2.4.1"
+    "@google/clasp": "^2.4.1",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "rollup-plugin-google-apps-script": "^2.0.2",
+    "typescript": "^5.9.3",
+    "vite-plugin-singlefile": "^2.3.0"
   },
   "dependencies": {
-    "rollup-plugin-google-apps-script": "^1.1.13",
-    "vite": "^4.5.3"
+    "@tailwindcss/vite": "^4.1.18",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.1.18",
+    "vite": "^5.4.21"
   }
 }
