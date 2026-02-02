@@ -1,7 +1,7 @@
 # 要件定義と実装計画書: 達成カレンダー（Achievement Calendar）
 
 ## 1. 目的と変更概要
-達成カレンダー（旧ヒートマップ）の表示モードを刷新し、ユーザーが「週」および「月」単位で達成状況を確認できるようにします。
+達成カレンダー（旧ヒートマップ）の表示モードを刷新し、ユーザーが「月」および「四半期」単位で達成状況を確認できるようにします。
 モバイルUIへの最適化を最優先とし、従来の「Yearly（年次ヒートマップ）」は廃止します。
 
 ## 2. 画面仕様 (UI Specs)
@@ -19,12 +19,13 @@
         -   今日の日付は視覚的に強調（枠線や太字等）。
     -   **モバイル対応**: 横幅いっぱいにグリッドを展開し、タップしやすいサイズを確保。
 
-2.  **Weekly View (週次カレンダー)**
-    -   **レイアウト**: 横一列のFlexレイアウト（日〜土の7日間）。
-    -   **表示内容**: 1週間分の日付セル。
+3.  **Quarterly View (四半期カレンダー)**
+    -   **レイアウト**: 横方向（Horizontal）に3ヶ月分を並べる。
+    -   **表示内容**: 連続する3ヶ月分の日付セル。
     -   **デザイン**:
-        -   Monthlyのカレンダー行を1行だけ切り出したような見た目。
-        -   各セル内に「曜日」と「日付」を表示。
+        -   GitHubのContribution Graphのような小さなドット（セル）を採用し、3ヶ月分が横幅に収まるようにする。
+        -   **期間の基準**: 現在の月を起点に3ヶ月（例: 今が2月なら2-4月）。
+        -   **ナビゲーション**: 1ヶ月ずつ移動（例: 2-4月 → nav next → 3-5月）。
 
 ### 2.2 Navigation UI
 カレンダー上部にナビゲーションバーを配置します。
@@ -33,9 +34,11 @@
 
 -   **前へ/次へボタン**:
     -   Monthlyモード時: 前月/翌月へ移動。
-    -   Weeklyモード時: 前週/翌週へ移動。
--   **タイトル**: 現在表示中の年月を表示（例: "2026年2月"）。
--   **View切替**: "Weekly" / "Monthly" を切り替えるトグルまたはタブ。
+    -   Quarterlyモード時: **1ヶ月単位**で前後に移動（例: 2-4月 → 3-5月）。
+-   **タイトル**:
+    -   Monthly: "2026年 2月"
+    -   Quarterly: "2026年 2月 - 4月"
+-   **View切替**: "Monthly" / "Quarterly" を切り替えるトグル。
 
 ## 3. 技術実装計画 (Technical Implementation)
 
@@ -46,15 +49,15 @@
 src/client/components/
 ├── AchievementCalendar.tsx      # [NEW] コンテナ。状態管理 (viewMode, currentDate) を担当
 └── CalendarViews/
-    ├── MonthlyView.tsx          # [NEW] CSS Grid レイアウト (7 columns)
-    ├── WeeklyView.tsx           # [NEW] Flex レイアウト (7 items)
-    └── CalendarCell.tsx         # [NEW] 日付セルの共通コンポーネント (Props: date, isAchieved, isToday)
+    ├── MonthlyView.tsx          # Css Grid レイアウト (7 columns)
+    ├── QuarterlyView.tsx        # [NEW] GitHub Contribution Graph風レイアウト (Horizontal scroll or scaled fit)
+    └── CalendarCell.tsx         # 日付セルの共通コンポーネント (Props: date, isAchieved, isToday)
 ```
 
 ### 3.2 状態管理 (State Management)
 `AchievementCalendar` コンポーネント内で以下のStateを保持します。
 
--   `viewMode`: `'monthly' | 'weekly'` (Default: `'monthly'`)
+-   `viewMode`: `'monthly' | 'quarterly'` (Default: `'monthly'`)
 -   `currentDate`: `Date` (現在表示している期間の基準日)
 
 ### 3.3 データ取得とフィルタリング
@@ -72,11 +75,14 @@ src/client/components/
     -   アプリ起動時、今月のカレンダーが表示されること。
     -   今日の達成状況が正しく反映されていること。
 2.  **モード切替**:
-    -   Weeklyに切り替えて、今週の7日間が表示されること。
+    -   Quarterlyに切り替えて、今月を含む3ヶ月分が表示されること。
 3.  **期間移動**:
     -   Monthlyで「先月」に移動し、過去の達成記録（草）が表示されること。
-    -   移動後、Weeklyに切り替えて、その月の最初の週（または選択中の週）が表示されること。
-4.  **インタラクション**:
+4.  **Quarterly View確認**:
+    -   Quarterlyに切り替えて、現在月を含む3ヶ月分が横に並んでいること。
+    -   ドットのサイズが小さく調整され、GitHubのContribution Graphのような見た目になっていること。
+    -   「次へ」を押すと、開始月が1ヶ月ずれることを確認。
+5.  **インタラクション**:
     -   日付セルをクリックして、特定の日のタスク確認ができること（既存機能との連携）。
 
 ---
