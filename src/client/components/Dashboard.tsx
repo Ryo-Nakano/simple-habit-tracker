@@ -1,5 +1,5 @@
 import { TaskList } from "./TaskList";
-import { Heatmap } from "./Heatmap";
+import { AchievementCalendar } from "./AchievementCalendar";
 import type { Task, Log } from "../types";
 
 interface DashboardProps {
@@ -38,8 +38,8 @@ export function Dashboard({
 
       {/* メインコンテンツ */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-        {/* ヒートマップ */}
-        <Heatmap tasks={tasks} logs={logs} onDateClick={onDateClick} />
+        {/* 達成カレンダー */}
+        <AchievementCalendar tasks={tasks} logs={logs} onDateClick={onDateClick} />
 
         {/* タスクリスト */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
