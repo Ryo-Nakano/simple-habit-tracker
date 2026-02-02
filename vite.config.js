@@ -28,6 +28,7 @@ export default defineConfig({
       },
     },
     minify: false, // trueにすると関数名が消えるのでfalse必須
+    emptyOutDir: false,
   },
   resolve: {
     alias: {
