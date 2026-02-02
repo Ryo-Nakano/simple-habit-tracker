@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "vite build",
+    "build:ui": "vite build --config vite.config.ui.mts",
     "build:watch": "vite build --watch",
     "push": "clasp push",
     "push:watch": "clasp push --watch",
@@ -14,10 +15,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@google/clasp": "^2.4.1"
+    "@google/clasp": "^2.4.1",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.9.3",
+    "vite-plugin-singlefile": "^2.3.0"
   },
   "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "rollup-plugin-google-apps-script": "^1.1.13",
-    "vite": "^4.5.3"
+    "vite": "^5.4.21"
   }
 }
