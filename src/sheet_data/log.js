@@ -16,6 +16,21 @@ export class Log extends BoundSheetData {
   }
 
   /**
+   * 日付を YYYY-MM-DD 形式の文字列に変換する。
+   * @param {Date|string} date 日付（Date オブジェクトまたは文字列）
+   * @returns {string} YYYY-MM-DD 形式の文字列
+   */
+  static _formatDate(date) {
+    if (date instanceof Date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    return String(date);
+  }
+
+  /**
    * 全てのログを取得する。
    * @returns {Array<{date: string, taskId: string, timestamp: string}>} ログの配列
    */
@@ -26,7 +41,7 @@ export class Log extends BoundSheetData {
 
     const data = sheet.getRange(2, 1, lastRow - 1, 3).getValues();
     return data.map(row => ({
-      date: row[0],
+      date: this._formatDate(row[0]),
       taskId: row[1],
       timestamp: row[2],
     }));
@@ -68,7 +83,8 @@ export class Log extends BoundSheetData {
 
     const data = sheet.getRange(2, 1, lastRow - 1, 2).getValues();
     for (let i = data.length - 1; i >= 0; i--) {
-      if (data[i][0] === date && data[i][1] === taskId) {
+      const rowDate = this._formatDate(data[i][0]);
+      if (rowDate === date && data[i][1] === taskId) {
         sheet.deleteRow(i + 2);
         return true;
       }
