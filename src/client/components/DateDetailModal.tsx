@@ -54,8 +54,8 @@ export function DateDetailModal({
         {/* 達成状況サマリー */}
         <div
           className={`p-3 rounded-lg text-center ${allCompleted
-              ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-              : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+            : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
             }`}
         >
           {allCompleted ? (
@@ -78,13 +78,13 @@ export function DateDetailModal({
                     type="checkbox"
                     checked={isCompleted}
                     onChange={() => handleToggle(task.id)}
-                    className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 
+                    className="w-6 h-6 rounded border-gray-300 dark:border-gray-600 
                                text-green-600 focus:ring-green-500"
                   />
                   <span
                     className={`flex-1 ${isCompleted
-                        ? "text-gray-500 dark:text-gray-400 line-through"
-                        : "text-gray-900 dark:text-white"
+                      ? "text-gray-500 dark:text-gray-400 line-through"
+                      : "text-gray-900 dark:text-white"
                       }`}
                   >
                     {task.title}
