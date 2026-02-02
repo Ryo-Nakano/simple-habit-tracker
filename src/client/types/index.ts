@@ -32,7 +32,7 @@ declare global {
       run: {
         withSuccessHandler<T>(callback: (result: T) => void): Google["script"]["run"];
         withFailureHandler(callback: (error: Error) => void): Google["script"]["run"];
-        [functionName: string]: (...args: unknown[]) => void;
+        [functionName: string]: any;
       };
     };
   }

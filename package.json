@@ -9,7 +9,7 @@
     "build:watch": "vite build --watch",
     "push": "clasp push",
     "push:watch": "clasp push --watch",
-    "deploy": "vite build && clasp push"
+    "deploy": "npm run build:ui && npm run build && clasp push"
   },
   "keywords": [],
   "author": "",

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Dashboard } from "./components/Dashboard";
 import { EditTaskModal } from "./components/EditTaskModal";
 import { DateDetailModal } from "./components/DateDetailModal";
+import { LoadingOverlay } from "./components/LoadingOverlay";
 import { server } from "./utils/gas";
 import type { Task, Log } from "./types";
 
@@ -21,8 +22,9 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [logs, setLogs] = useState<Log[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState(getTodayString());
+  const [selectedDate] = useState(getTodayString());
 
   // モーダル関連のステート
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -48,6 +50,7 @@ function App() {
 
   // ログのトグル（今日のタスクリスト用）
   const handleToggleLog = async (taskId: string, isDone: boolean) => {
+    setIsProcessing(true);
     // 楽観的更新
     if (isDone) {
       setLogs((prev) => [...prev, { date: selectedDate, taskId }]);
@@ -69,6 +72,8 @@ function App() {
       } else {
         setLogs((prev) => [...prev, { date: selectedDate, taskId }]);
       }
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -78,6 +83,7 @@ function App() {
     taskId: string,
     isDone: boolean
   ) => {
+    setIsProcessing(true);
     // 楽観的更新
     if (isDone) {
       setLogs((prev) => [...prev, { date, taskId }]);
@@ -99,22 +105,28 @@ function App() {
       } else {
         setLogs((prev) => [...prev, { date, taskId }]);
       }
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   // タスク追加
   const handleAddTask = async (title: string) => {
+    setIsProcessing(true);
     try {
       const newTask = await server.addTask(title);
       setTasks((prev) => [...prev, newTask]);
     } catch (err) {
       console.error("Failed to add task:", err);
       throw err;
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   // タスク更新
   const handleUpdateTask = async (taskId: string, newTitle: string) => {
+    setIsProcessing(true);
     try {
       const updatedTask = await server.updateTask(taskId, newTitle);
       setTasks((prev) =>
@@ -123,11 +135,14 @@ function App() {
     } catch (err) {
       console.error("Failed to update task:", err);
       throw err;
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   // タスク削除
   const handleDeleteTask = async (taskId: string) => {
+    setIsProcessing(true);
     try {
       await server.deleteTask(taskId);
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
@@ -136,6 +151,8 @@ function App() {
     } catch (err) {
       console.error("Failed to delete task:", err);
       throw err;
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -175,6 +192,7 @@ function App() {
 
   return (
     <>
+      <LoadingOverlay isVisible={isProcessing} />
       <Dashboard
         tasks={tasks}
         logs={logs}

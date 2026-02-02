@@ -57,14 +57,17 @@ export function Heatmap({ tasks, logs, onDateClick }: HeatmapProps) {
   const values = getDateValues();
 
   // 日付クリックハンドラ
-  const handleClick = (value: HeatmapValue | null) => {
-    if (value?.date) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleClick = (value: any) => {
+    if (value && value.date) {
       onDateClick(value.date);
     }
   };
 
   // 色のクラス名を返す
-  const classForValue = (value: HeatmapValue | null) => {
+  // 色のクラス名を返す
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const classForValue = (value: any) => {
     if (!value || value.count === 0) {
       return "color-empty";
     }
@@ -72,7 +75,8 @@ export function Heatmap({ tasks, logs, onDateClick }: HeatmapProps) {
   };
 
   // ツールチップ用のタイトル
-  const titleForValue = (value: HeatmapValue | null) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const titleForValue = (value: any) => {
     if (!value?.date) return "";
     const d = new Date(value.date);
     const dateStr = d.toLocaleDateString("ja-JP", {
