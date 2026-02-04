@@ -1,6 +1,21 @@
-import { TaskItem } from "./TaskItem";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { SortableTaskItem } from "./SortableTaskItem";
 import { AddTaskForm } from "./AddTaskForm";
 import type { Task, Log } from "../types";
+import { useTaskOrder } from "../hooks/useTaskOrder";
 
 interface TaskListProps {
   tasks: Task[];
@@ -27,10 +42,32 @@ export function TaskList({
     logs.filter((log) => log.date === selectedDate).map((log) => log.taskId)
   );
 
+  // タスク順序管理フックを使用
+  const { sortedTasks, updateOrder } = useTaskOrder(tasks);
+
   // 達成率を計算
   const completedCount = tasks.filter((t) => completedTaskIds.has(t.id)).length;
   const totalCount = tasks.length;
   const allCompleted = completedCount === totalCount && totalCount > 0;
+
+  // センサー設定（マウス + タッチ対応）
+  // touch-action: none はスタイルで制御済み
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      const oldIndex = sortedTasks.findIndex((t) => t.id === active.id);
+      const newIndex = sortedTasks.findIndex((t) => t.id === over?.id);
+
+      const newOrder = arrayMove(sortedTasks.map(t => t.id), oldIndex, newIndex);
+      updateOrder(newOrder);
+    }
+  };
 
   // 日付をフォーマット
   const formatDate = (dateStr: string) => {
@@ -69,7 +106,6 @@ export function TaskList({
       </div>
 
       {/* プログレスバー */}
-      {/* プログレスバー */}
       {totalCount > 0 && (
         <div className="w-full mb-4">
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
@@ -91,17 +127,28 @@ export function TaskList({
       <AddTaskForm onAdd={onAddTask} />
 
       {/* タスクリスト */}
-      <ul className="space-y-2">
-        {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            isCompleted={completedTaskIds.has(task.id)}
-            onToggle={onToggleLog}
-            onEdit={onEditTask}
-          />
-        ))}
-      </ul>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={sortedTasks.map(t => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <ul className="space-y-2">
+            {sortedTasks.map((task) => (
+              <SortableTaskItem
+                key={task.id}
+                task={task}
+                isCompleted={completedTaskIds.has(task.id)}
+                onToggle={onToggleLog}
+                onEdit={onEditTask}
+              />
+            ))}
+          </ul>
+        </SortableContext>
+      </DndContext>
 
       {tasks.length === 0 && (
         <p className="text-center text-gray-500 dark:text-gray-400 py-8">
@@ -121,3 +168,4 @@ export function TaskList({
     </div>
   );
 }
+

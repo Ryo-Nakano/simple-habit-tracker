@@ -1,10 +1,15 @@
 import type { Task } from "../types";
+import type { DraggableAttributes } from "@dnd-kit/core";
+import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 
 interface TaskItemProps {
   task: Task;
   isCompleted: boolean;
   onToggle: (taskId: string, isDone: boolean) => void;
   onEdit: (task: Task) => void;
+  dragHandleListeners?: SyntheticListenerMap;
+  dragHandleAttributes?: DraggableAttributes;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -15,13 +20,31 @@ export function TaskItem({
   isCompleted,
   onToggle,
   onEdit,
+  dragHandleListeners,
+  dragHandleAttributes,
+  style,
 }: TaskItemProps) {
   const handleCheckboxChange = () => {
     onToggle(task.id, !isCompleted);
   };
 
   return (
-    <li className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+    <li
+      className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow touch-manipulation"
+      style={style}
+    >
+      {/* ドラッグハンドル */}
+      <button
+        {...dragHandleListeners}
+        {...dragHandleAttributes}
+        className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-grab active:cursor-grabbing touch-none"
+        aria-label="ドラッグして並び替え"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path fillRule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+        </svg>
+      </button>
+
       {/* チェックボックス */}
       <input
         type="checkbox"
@@ -65,3 +88,4 @@ export function TaskItem({
     </li>
   );
 }
+
