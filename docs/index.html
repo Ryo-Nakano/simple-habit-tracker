@@ -13,12 +13,17 @@
 
     // ページ読み込みと同時に転送
     // window.location.replace(gasUrl);
+
+    function manualRedirect() {
+      window.location.href = gasUrl;
+    }
   </script>
 
   <style>
     /* 転送される一瞬の間に表示される画面のスタイル */
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -27,11 +32,26 @@
       font-family: sans-serif;
       color: #666;
     }
+
+    .manual-button {
+      margin-top: 20px;
+      border: none;
+      background: none;
+      color: #ccc;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .manual-button:hover {
+      color: #999;
+    }
   </style>
 </head>
 
 <body>
   <p>Opening Application...</p>
+  <button class="manual-button" onclick="manualRedirect()">Open habitra</button>
 </body>
 
 </html>

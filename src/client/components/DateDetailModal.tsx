@@ -1,5 +1,6 @@
 import { Modal } from "./Modal";
 import type { Task, Log } from "../types";
+import { useTaskOrder } from "../hooks/useTaskOrder";
 
 interface DateDetailModalProps {
   isOpen: boolean;
@@ -21,6 +22,9 @@ export function DateDetailModal({
   logs,
   onToggleLog,
 }: DateDetailModalProps) {
+  // タスク順序管理フックを使用（ソート済みタスクを取得）
+  const { sortedTasks } = useTaskOrder(tasks);
+
   if (!date) return null;
 
   // 選択した日付のログを取得
@@ -69,7 +73,7 @@ export function DateDetailModal({
 
         {/* タスクリスト */}
         <ul className="space-y-2">
-          {tasks.map((task) => {
+          {sortedTasks.map((task) => {
             const isCompleted = completedTaskIds.has(task.id);
             return (
               <li key={task.id}>
@@ -104,3 +108,4 @@ export function DateDetailModal({
     </Modal>
   );
 }
+

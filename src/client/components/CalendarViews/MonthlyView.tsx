@@ -1,5 +1,6 @@
 import React from "react";
 import { CalendarCell } from "./CalendarCell";
+import { formatDateToString } from "../../utils/date";
 
 interface MonthlyViewProps {
   currentDate: Date;
@@ -43,9 +44,6 @@ export const MonthlyView: React.FC<MonthlyViewProps> = ({
     d.getMonth() === today.getMonth() &&
     d.getFullYear() === today.getFullYear();
 
-  // YYYY-MM-DD 文字列変換
-  const formatDate = (d: Date) => d.toISOString().split("T")[0];
-
   return (
     <div>
       {/* 曜日ヘッダー */}
@@ -58,7 +56,7 @@ export const MonthlyView: React.FC<MonthlyViewProps> = ({
       {/* カレンダーグリッド */}
       <div className="grid grid-cols-7 gap-3">
         {days.map((date, index) => {
-          const dateStr = formatDate(date);
+          const dateStr = formatDateToString(date);
           const isCurrentMonth = date.getMonth() === month;
 
           return (

@@ -31,7 +31,7 @@ export function Dashboard({
         <div className="max-w-4xl mx-auto px-4 py-4">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <span>🌱</span>
-            <span>Simple Habit Tracker</span>
+            <span>habitra</span>
           </h1>
         </div>
       </header>
@@ -56,7 +56,7 @@ export function Dashboard({
 
       {/* フッター */}
       <footer className="text-center py-4 text-sm text-gray-400 dark:text-gray-500">
-        Simple Habit Tracker &copy; 2026
+        habitra &copy; 2026
       </footer>
     </div>
   );

@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "deploymentId": "AKfycbzXrJQ0dt4sw04VyRLKwXm5Xod4Q7x8KwB_mXh7GvfuHbg1ZIE-PNbvVt89sx7FUIiv"
+  },
   "scripts": {
     "build": "vite build",
     "build:ui": "vite build --config vite.config.ui.mts",
     "build:watch": "vite build --watch",
-    "push": "clasp push",
+    "push": "clasp push --force",
     "push:watch": "clasp push --watch",
-    "deploy": "npm run build:ui && npm run build && clasp push"
+    "deploy": "npm run build:ui && npm run build && clasp push --force && clasp deploy -i $npm_package_config_deploymentId -d 'Auto-deployed'"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +27,8 @@
     "vite-plugin-singlefile": "^2.3.0"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

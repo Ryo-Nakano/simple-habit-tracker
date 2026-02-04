@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDateToString } from "../../utils/date";
 
 interface QuarterlyViewProps {
   currentDate: Date;
@@ -35,9 +36,6 @@ export const QuarterlyView: React.FC<QuarterlyViewProps> = ({
     current.setDate(current.getDate() + 1);
     count++;
   }
-
-  // YYYY-MM-DD 文字列変換
-  const formatDate = (d: Date) => d.toISOString().split("T")[0];
 
   // 今日の日付を取得（比較用）
   const today = new Date();
@@ -108,7 +106,7 @@ export const QuarterlyView: React.FC<QuarterlyViewProps> = ({
               className="grid gap-1 grid-rows-7 grid-flow-col"
             >
               {dates.map((date, idx) => {
-                const dateStr = formatDate(date);
+                const dateStr = formatDateToString(date);
                 const isAchieved = achievedDates.has(dateStr);
                 const isToday = isDateToday(date);
 

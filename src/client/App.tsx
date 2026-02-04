@@ -4,15 +4,8 @@ import { EditTaskModal } from "./components/EditTaskModal";
 import { DateDetailModal } from "./components/DateDetailModal";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 import { server } from "./utils/gas";
+import { getTodayString } from "./utils/date";
 import type { Task, Log } from "./types";
-
-/**
- * 今日の日付をYYYY-MM-DD形式で取得
- */
-function getTodayString(): string {
-  const today = new Date();
-  return today.toISOString().split("T")[0];
-}
 
 /**
  * アプリケーションのメインコンポーネント

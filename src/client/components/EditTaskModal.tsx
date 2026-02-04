@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "./Modal";
 import type { Task } from "../types";
 
@@ -25,9 +25,11 @@ export function EditTaskModal({
   const [isDeleting, setIsDeleting] = useState(false);
 
   // タスクが変わったらタイトルを更新
-  if (task && title !== task.title && !isSaving) {
-    setTitle(task.title);
-  }
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+    }
+  }, [task]);
 
   const handleSave = async () => {
     if (!task || !title.trim()) return;
