@@ -60,13 +60,32 @@ export function TaskList({
         </h2>
         <span
           className={`px-3 py-1 rounded-full text-sm font-medium ${allCompleted
-              ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-              : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+            : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
             }`}
         >
           {completedCount}/{totalCount}
         </span>
       </div>
+
+      {/* プログレスバー */}
+      {/* プログレスバー */}
+      {totalCount > 0 && (
+        <div className="w-full mb-4">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div
+              className="bg-green-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${Math.round((completedCount / totalCount) * 100)}%` }}
+            ></div>
+          </div>
+          <div className="text-right text-xs text-gray-500 mt-1">
+            {Math.round((completedCount / totalCount) * 100)}% 完了
+          </div>
+        </div>
+      )}
+      {totalCount === 0 && (
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4 opacity-50"></div>
+      )}
 
       {/* タスク追加フォーム */}
       <AddTaskForm onAdd={onAddTask} />
